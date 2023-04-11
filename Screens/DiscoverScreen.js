@@ -17,16 +17,20 @@ const DiscoverScreen = () => {
     const [type, setType] = useState("restaurants")
     const [isLoading, setIsLoading] = useState(false)
     const [mainData, setMainData] = useState([])
+    const [bl_lat, setBl_lat] = useState(null)
+    const [bl_long, setBl_long] = useState(null)
+    const [tr_lat, setTr_lat] = useState(null)
+    const [tr_long, setTr_long] = useState(null)
 
     useEffect(() => {
         setIsLoading(true)
-        getPlacesData().then(data => {
+        getPlacesData(bl_lat, bl_long, tr_lat, tr_long, type).then(data => {
             setMainData(data)
             setInterval(() => {
                 setIsLoading(false)
             }, 2000)
         })
-    }, [])
+    }, [bl_lat, bl_long, tr_lat, tr_long, type])
 
     return (
         <>
@@ -54,9 +58,13 @@ const DiscoverScreen = () => {
                         enablePoweredByContainer={false}
                         onPress={(data, details = null) => {
                             // 'details' is provided when fetchDetails = true
-                            console.log(data, details);
-                            console.log(JSON.stringify(details?.geometry?.viewport));
-                            console.warn(JSON.stringify(details?.geometry?.viewport));
+                            // console.log(data, details);
+                            // console.log(JSON.stringify(details?.geometry?.viewport?.southwest?.lat));
+                            setBl_lat(details?.geometry?.viewport?.southwest?.lat)
+                            setBl_long(details?.geometry?.viewport?.southwest?.lng)
+                            setTr_lat(details?.geometry?.viewport?.northeast?.lat)
+                            setTr_long(details?.geometry?.viewport?.northeast?.lng)
+                            // console.log(bl_lat, bl_long, tr_lat, tr_long)
                         }}
                         query={{
                             key: GOOGLE_PLACES_API_KEY,
@@ -77,11 +85,11 @@ const DiscoverScreen = () => {
                         :
                         (
                             <View>
-                                <ScrollView>
+                                <ScrollView showsVerticalScrollIndicator={false}>
                                     <View className="flex-row items-center justify-between px-8 mt-8">
                                         <MenuContainer
-                                            key={"hotel"}
-                                            title={"Hotel"}
+                                            key={"hotels"}
+                                            title={"Hotels"}
                                             image={HOTELS}
                                             type={type}
                                             setType={setType}

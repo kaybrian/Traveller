@@ -2,6 +2,8 @@ import { View, Text, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'r
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { FontAwesome5, FontAwesome, MaterialIcons } from '@expo/vector-icons'
+
+
 const ItemsScreen = ({ route }) => {
     const navigation = useNavigation();
 
@@ -63,7 +65,7 @@ const ItemsScreen = ({ route }) => {
                         data?.rating && (
                             <View className="flex-row space-x-2 items-center">
                                 <View className="w-12 h-12 rounded-2xl bg-red-200 items-center justify-center shadow-md">
-                                    <FontAwesome name="star" size={14} color="#D58574" />
+                                    <FontAwesome name="star" size={20} color="#D58574" />
                                 </View>
                                 <View>
                                     <Text className="text-[#515151]">{data?.rating}</Text>
@@ -78,11 +80,10 @@ const ItemsScreen = ({ route }) => {
                         data?.price_level && (
                             <View className="flex-row space-x-2 items-center">
                                 <View className="w-12 h-12 rounded-2xl bg-red-200 items-center justify-center shadow-md">
-                                    <MaterialIcons name="attach-money" size={14} color="#D58574" />
+                                    <MaterialIcons name="attach-money" size={20} color="#D58574" />
                                 </View>
                                 <View>
-                                    <Text className="text-[#515151]">{data?.price_level}</Text>
-                                    <Text className="text-[#515151]">Ratings</Text>
+                                    <Text className="text-[#515151]">{data?.price}</Text>
                                 </View>
                             </View>
                         )
@@ -93,7 +94,7 @@ const ItemsScreen = ({ route }) => {
                         data?.bearing && (
                             <View className="flex-row space-x-2 items-center">
                                 <View className="w-12 h-12 rounded-2xl bg-red-200 items-center justify-center shadow-md">
-                                    <FontAwesome5 name="map-signs" size={14} color="#D58574" />
+                                    <FontAwesome5 name="map-signs" size={20} color="#D58574" />
                                 </View>
                                 <View>
                                     <Text className="text-[#515151]">{data?.bearing}</Text>
@@ -106,7 +107,7 @@ const ItemsScreen = ({ route }) => {
 
                 {
                     data?.description && (
-                        <View className="mt-6 mb-2">
+                        <View className="mt-6 mb-5">
                             <Text className="text-[#97A6AF] tracking-wide text-[16px] font-semibold">{data?.description}</Text>
                         </View>
                     )
@@ -114,11 +115,11 @@ const ItemsScreen = ({ route }) => {
 
                 {
                     data?.cuisine && (
-                        <View className="mt-8 flex-row gap-2 items-center justify-start flex-wrap ">
+                        <View className="mt-3 flex-row gap-2 items-center justify-start flex-wrap ">
                             {
                                 data?.cuisine?.map((item) => (
                                     <TouchableOpacity key={item.key}
-                                        className="px-2 py-1 rounded-md bg-emerald-400"
+                                        className="px-2 py-1 rounded-md bg-[#00BCC9]"
                                     >
                                         <Text className="text-white font-semibold">{item.name}</Text>
 
@@ -135,7 +136,7 @@ const ItemsScreen = ({ route }) => {
                     {
                         data?.phone && (
                             <View className="items-center flex-row space-x-2">
-                                <FontAwesome name="phone" size={14} color="#8597A2" />
+                                <FontAwesome name="phone" size={18} color="#8597A2" />
                                 <Text className="text-[12px] font-bold text-[#8597A2]">{data?.phone}</Text>
                             </View>
                         )
@@ -146,7 +147,7 @@ const ItemsScreen = ({ route }) => {
                     {
                         data?.email && (
                             <View className="items-center flex-row space-x-2">
-                                <FontAwesome name="envelope" size={14} color="#8597A2" />
+                                <FontAwesome name="envelope" size={18} color="#8597A2" />
                                 <Text className="text-[12px] font-bold text-[#8597A2]">{data?.email}</Text>
                             </View>
                         )
@@ -157,13 +158,19 @@ const ItemsScreen = ({ route }) => {
                     {
                         data?.address && (
                             <View className="items-center flex-row space-x-2">
-                                <FontAwesome name="map-marker" size={14} color="#8597A2" />
+                                <FontAwesome name="map-marker" size={18} color="#8597A2" />
                                 <Text className="text-[12px] font-bold text-[#8597A2]">{data?.address}</Text>
                             </View>
                         )
 
                     }
 
+                    <TouchableOpacity className="mt-4 px-4 py-4 rounded-lg bg-[#00BCC9] items-center justify-center">
+                        <Text className="text-3xl text-white font-bold">
+                            Book Now
+                        </Text>
+
+                    </TouchableOpacity>
                 </View>
 
 
