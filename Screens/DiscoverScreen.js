@@ -28,7 +28,6 @@ const DiscoverScreen = () => {
         })
     }, [])
 
-    console.log(mainData)
     return (
         <>
             <SafeAreaView className="bg-white relative flex-1 mt-4">
@@ -117,8 +116,20 @@ const DiscoverScreen = () => {
                                         {
                                             mainData?.length > 0 ? (
                                                 <>
-                                                    <ItemComtainer key={"101"} imageSrc={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbIdVrD53M34QH-xazUtR-52f9zexLxVDsCg&usqp=CAU"} title="Free Start" location="Kibaga" />
-                                                    <ItemComtainer key={"102"} imageSrc={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbIdVrD53M34QH-xazUtR-52f9zexLxVDsCg&usqp=CAU"} title="Meza Fresh" location="Kigali" />
+                                                    {
+                                                        mainData?.map((data, index) => (
+                                                            <ItemComtainer
+                                                                key={index}
+                                                                imageSrc={
+                                                                    data?.photo?.images?.medium?.url ? data?.photo?.images?.medium?.url : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFHF6OdT6iHrD5q_vDMKyBGwUaMjC6wDL_6b9ALsblDg&s"
+                                                                }
+                                                                title={data?.name}
+                                                                location={data?.location_string}
+                                                                data={data}
+                                                            />
+                                                        ))
+                                                    }
+
                                                 </>
 
                                             ) :
