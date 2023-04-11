@@ -1,9 +1,12 @@
 import { View, Text, SafeAreaView, StatusBar, Image, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_PLACES_API_KEY } from '../api_keys';
 import MenuContainer from '../Components/MenuContainer';
 import { FontAwesome } from '@expo/vector-icons';
+import ItemComtainer from '../Components/ItemComtainer';
+import * as Progress from 'react-native-progress';
+import { getPlacesData } from '../api';
 
 
 const HOTELS = require('../assets/hotel.png')
@@ -12,7 +15,20 @@ const ATTRACTIONS = require('../assets/attraction.png')
 
 const DiscoverScreen = () => {
     const [type, setType] = useState("restaurants")
+    const [isLoading, setIsLoading] = useState(false)
+    const [mainData, setMainData] = useState([])
 
+    useEffect(() => {
+        setIsLoading(true)
+        getPlacesData().then(data => {
+            setMainData(data)
+            setInterval(() => {
+                setIsLoading(false)
+            }, 2000)
+        })
+    }, [])
+
+    console.log(mainData)
     return (
         <>
             <SafeAreaView className="bg-white relative flex-1 mt-4">
@@ -51,52 +67,79 @@ const DiscoverScreen = () => {
                 </View>
 
                 {/* Menu container */}
-                <View>
-                    <ScrollView>
-                        <View className="flex-row items-center justify-between px-8 mt-8">
-                            <MenuContainer
-                                key={"hotel"}
-                                title={"Hotel"}
-                                image={HOTELS}
-                                type={type}
-                                setType={setType}
-                            />
-                            <MenuContainer
-                                key={"attractions"}
-                                title={"Attractions"}
-                                image={ATTRACTIONS}
-                                type={type}
-                                setType={setType}
-                            />
-                            <MenuContainer
-                                key={"restaurants"}
-                                title={"Restaurants"}
-                                image={RESTAURANTS}
-                                type={type}
-                                setType={setType}
-                            />
-                        </View>
 
-                        <View>
-                            <View className="flex-row items-center justify-between px-4 mt-8">
-                                <Text className="text-[#2C7379] text-[28px] font-bold" >Top Tips</Text>
-                                <TouchableOpacity className="flex-row items-center justify-center space-x-2">
-                                    <Text className="text-[#A0C4C7] text-[20px] font-bold">Explore</Text>
-                                    <FontAwesome name="long-arrow-right" size={24} color="#A0C4C7" />
-                                </TouchableOpacity>
+                {
+                    isLoading ?
+                        (
+                            <View className="flex-1 items-center justify-center">
+                                <Progress.Circle color='#00BCC9' size={50} indeterminate={true} />
                             </View>
-                        </View>
+                        )
+                        :
+                        (
+                            <View>
+                                <ScrollView>
+                                    <View className="flex-row items-center justify-between px-8 mt-8">
+                                        <MenuContainer
+                                            key={"hotel"}
+                                            title={"Hotel"}
+                                            image={HOTELS}
+                                            type={type}
+                                            setType={setType}
+                                        />
+                                        <MenuContainer
+                                            key={"attractions"}
+                                            title={"Attractions"}
+                                            image={ATTRACTIONS}
+                                            type={type}
+                                            setType={setType}
+                                        />
+                                        <MenuContainer
+                                            key={"restaurants"}
+                                            title={"Restaurants"}
+                                            image={RESTAURANTS}
+                                            type={type}
+                                            setType={setType}
+                                        />
+                                    </View>
 
-                        <View className="px-4 mt-8 flex-row items-center justify-evenly flex-wrap">
+                                    <View>
+                                        <View className="flex-row items-center justify-between px-4 mt-8">
+                                            <Text className="text-[#2C7379] text-[28px] font-bold" >Top Tips</Text>
+                                            <TouchableOpacity className="flex-row items-center justify-center space-x-2">
+                                                <Text className="text-[#A0C4C7] text-[20px] font-bold">Explore</Text>
+                                                <FontAwesome name="long-arrow-right" size={24} color="#A0C4C7" />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
 
-                        </View>
+                                    <View className="px-4 mt-8 flex-row items-center justify-evenly flex-wrap">
+                                        {
+                                            mainData?.length > 0 ? (
+                                                <>
+                                                    <ItemComtainer key={"101"} imageSrc={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbIdVrD53M34QH-xazUtR-52f9zexLxVDsCg&usqp=CAU"} title="Free Start" location="Kibaga" />
+                                                    <ItemComtainer key={"102"} imageSrc={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbIdVrD53M34QH-xazUtR-52f9zexLxVDsCg&usqp=CAU"} title="Meza Fresh" location="Kigali" />
+                                                </>
 
+                                            ) :
+                                                <View className="w-full h-[400px] items-center justify-center flex-1 space-y-8">
+                                                    <Image
+                                                        source={require('../assets/NotFound.png')}
+                                                        resizeMode='contain'
+                                                        className="w-32 h-32 rounded-md object-cover"
+                                                    />
+                                                    <Text className="text-2xl text-[#428288] font-semibold">Ooops ...... No data Found</Text>
+                                                </View>
+                                        }
+                                    </View>
 
-                    </ScrollView>
+                                </ScrollView>
+                            </View>
 
-                </View>
+                        )
+                }
 
-            </SafeAreaView>
+            </SafeAreaView >
 
             <StatusBar />
         </>
